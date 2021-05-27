@@ -1,5 +1,8 @@
 <template>
-  <span class="icon" :style="{ fill: color ? color : 'currentColor',...iconSize}">
+  <span
+    class="icon"
+    :style="{ fill: color ? color : 'currentColor', ...iconSize }"
+  >
     <badge
       v-if="badge"
       :content="badge.content"
@@ -7,8 +10,13 @@
       :color="badge.color"
       :visible="badge.visible"
     ></badge>
-    <svg :style="iconSize" focusable="false" :viewBox="viewBox" aria-hidden="true">
-      <path :d="path"></path>
+    <svg
+      :style="iconSize"
+      focusable="false"
+      :viewBox="viewBox"
+      aria-hidden="true"
+    >
+      <path :d="path" v-for="(path, idx) in iconPaths" :key="idx"></path>
     </svg>
   </span>
 </template>
@@ -54,8 +62,10 @@ export default {
     return {};
   },
   computed: {
-    path() {
-      return iconMap[this.name].path;
+    iconPaths() {
+      let oPath = iconMap[this.name].path;
+      if (typeof oPath === "string") return [oPath];
+      else return oPath;
     },
     viewBox() {
       return iconMap[this.name].viewBox;
