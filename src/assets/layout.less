@@ -1,0 +1,34 @@
+.group-box {
+  display: flex;
+  position: relative;
+  padding: 24px;
+
+  p {
+    margin: 8px 0;
+  }
+}
+
+.box-block {
+  flex-direction: column;
+
+  .row {
+    display: flex;
+    background: #fff;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.box-inline {
+  flex-direction: row;
+
+  &.center {
+    justify-content: center;
+  }
+
+  .col {
+    display: flex;
+    background: #fff;
+    justify-content: center;
+  }
+}

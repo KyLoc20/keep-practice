@@ -1,0 +1,61 @@
+body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    animation: ripple 800ms ease-out;
+    transform: scale(0);
+}
+
+.fast-ripple .ripple {
+    animation: ripple 400ms ease-out;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(6);
+        opacity: 0;
+    }
+}
+
+.plain .ripple {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.default .ripple {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.primary.contained .ripple,
+.secondary.contained .ripple,
+.plain.iconed .ripple {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.primary .ripple {
+    background-color: rgba(25, 118, 210, 0.3);
+}
+
+.secondary .ripple {
+    background-color: rgba(220, 0, 78, 0.3);
+}
+
+.default-ripple .ripple {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.plain-ripple .ripple {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.primary-ripple .ripple {
+    background-color: rgba(25, 118, 210, 0.3);
+}
+
+.secondary-ripple .ripple {
+    background-color: rgba(220, 0, 78, 0.3);
+}
