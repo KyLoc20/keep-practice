@@ -39,7 +39,7 @@
         <div class="text-field" :class="isInputFocused ? 'focused' : ''">
           <!-- <section class="title-space"  v-if="isInputFocused"></section> -->
           <input
-          ref="input"
+            ref="input"
             type="text"
             class="input-context"
             placeholder="Write a note..."
@@ -67,18 +67,30 @@
           </section>
         </div>
       </section>
+      <section class="note-group-component">
+        <vnote :content="testStr"></vnote>
+        <vnote content="2"></vnote>
+        <vnote content="3"></vnote>
+        <vnote content="2"></vnote>
+        <vnote content="3"></vnote>
+        <vnote content="2"></vnote>
+        <vnote content="3"></vnote>
+        <vnote content="2"></vnote>
+        <vnote content="3"></vnote>
+      </section>
     </section>
   </div>
 </template>
 
 <script>
 import AppBar from "./local/components/AppBar";
+import Vnote from "./local/components/Note";
 import IconButton from "./components/Button/IconButton";
 import Icon from "./components/Icon/Icon";
 import { NoteManager, Note } from "./local/controller/note";
 export default {
   name: "App",
-  components: { AppBar, IconButton, Icon },
+  components: { AppBar, Vnote, IconButton, Icon },
   data() {
     return {
       isNavigationCollapsed: true,
@@ -94,6 +106,7 @@ export default {
       selctedAnchor: "Notes",
       managerNote: null,
       currentInputContent: null,
+      testStr: "1\n2",
     };
   },
   computed: {
@@ -145,7 +158,7 @@ export default {
     handleInputFocus() {
       console.log("handleInputFocus", this.$refs.input);
       this.isInputFocused = true;
-      //todo when other el displays at the position of input el, the input will blur 
+      //todo when other el displays at the position of input el, the input will blur
     },
     handleInputBlur(e) {
       console.log("handleInputBlur", e);
@@ -166,7 +179,6 @@ export default {
 }
 #app {
   display: flex;
-  justify-content: center;
   position: relative;
 
   font-family: "Roboto", Helvetica, Arial, sans-serif;
@@ -193,6 +205,7 @@ export default {
     //todo its width should be decided by inner el
     margin-top: 64px; //for header
     transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) 100ms;
+    flex-shrink: 0;
     ul {
       padding: 0;
       list-style: none;
@@ -244,12 +257,15 @@ export default {
   }
   .main-container {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 64px; //for header
     box-sizing: border-box;
     background-color: #202124;
     color: #e8eaed;
     .input-component {
-      margin: 32px 520px 16px;
+      margin: 32px 0 16px;
       display: flex;
       justify-content: center;
       .text-field {
@@ -330,6 +346,12 @@ export default {
           }
         }
       }
+    }
+    .note-group-component {
+      display: flex;
+      flex-wrap: wrap;
+      padding:0 38px;
+      box-sizing: border-box;
     }
   }
 }
