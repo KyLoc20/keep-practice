@@ -84,7 +84,7 @@ export default {
     classIconButton() {
       return this.disabled
         ? " disabled"
-        : " " + this.color + (this.isFlat ? " flat" : "");
+        : this.color + (this.isFlat ? " flat" : "");
     },
   },
   methods: {
