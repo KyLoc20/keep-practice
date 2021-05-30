@@ -7,6 +7,7 @@
             <icon-button
               color="plain"
               icon="menu"
+              :iconSize="24"
               iconColor="#e8eaed"
               @click="handleOpenMenu"
             ></icon-button>
@@ -49,15 +50,17 @@
           <section class="control-context" v-if="isInputFocused">
             <section class="tool-context">
               <icon-button
-                color="plain"
                 size="sm"
                 icon="label"
+                hoverColor="rgba(232,234,237,0.08)"
                 iconColor="#9aa0a6"
+                disabled
               ></icon-button>
               <icon-button
-                color="plain"
                 size="sm"
                 icon="palette"
+                :iconSize="16"
+                 hoverColor="rgba(232,234,237,0.08)"
                 iconColor="#9aa0a6"
               ></icon-button>
             </section>
@@ -85,7 +88,7 @@
 <script>
 import AppBar from "./local/components/AppBar";
 import Vnote from "./local/components/Note";
-import IconButton from "./components/Button/IconButton";
+import IconButton from "./components/Button/IconButton2";
 import Icon from "./components/Icon/Icon";
 import { NoteManager, Note } from "./local/controller/note";
 export default {
@@ -191,6 +194,10 @@ export default {
     }
     .navigation-menu {
       margin: 0 4px;
+      .icon-button{
+        width:48px;
+        height:48px;
+      }
     }
     .logo {
       width: 60px;
@@ -311,16 +318,16 @@ export default {
             align-items: center;
             .icon-button {
               margin: 0 8px;
-              &:hover {
-                /deep/ .icon {
-                  fill: #e8eaed !important;
-                }
-              }
+              // &:hover {
+              //   /deep/ .icon {
+              //     fill: #e8eaed !important;
+              //   }
+              // }
 
-              /deep/ button {
-                //todo IconButton prop missing
-                padding: 7px;
-              }
+              // /deep/ button {
+              //   //todo IconButton prop missing
+              //   padding: 7px;
+              // }
             }
           }
           .action-context {

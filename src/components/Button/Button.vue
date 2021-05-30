@@ -292,7 +292,7 @@ button {
   }
 }
 .iconed-btn {
-  box-shadow: none;
+  
   background: transparent;
   &.default-btn {
     color: rgba(0, 0, 0, 0.54);
