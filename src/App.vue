@@ -44,6 +44,8 @@
             type="text"
             class="input-context"
             placeholder="Write a note..."
+            v-model.trim="currentInputContent"
+            @keyup.enter="handleInputDone"
             @focus="handleInputFocus"
             @blur="handleInputBlur"
           />
@@ -75,15 +77,7 @@
         </div>
       </section>
       <section class="note-group-component">
-        <vnote :content="testStr"></vnote>
-        <vnote content="2"></vnote>
-        <vnote content="3"></vnote>
-        <vnote content="2"></vnote>
-        <vnote content="3"></vnote>
-        <vnote content="2"></vnote>
-        <vnote content="3"></vnote>
-        <vnote content="2"></vnote>
-        <vnote content="3"></vnote>
+        <vnote :content="note.content" v-for="note in noteCollection" :key="note.id"></vnote>
       </section>
     </section>
   </div>
@@ -117,6 +111,10 @@ export default {
     };
   },
   computed: {
+    noteCollection(){
+      if(this.managerNote)return this.managerNote.collection
+      else return []
+    },
     leftContainerWidth() {
       if (this.isNavigationCollapsed) return { width: "80px" };
       else return { width: "280px" };
@@ -170,8 +168,16 @@ export default {
     handleInputBlur(e) {
       console.log("handleInputBlur", e);
     },
+    resetInputContent() {
+      this.currentInputContent = "";
+    },
     handleInputDone() {
-      console.log("handleInputDone");
+      console.log("handleInputDone", this.currentInputContent,this.managerNote.renderNotes());
+      this.$emit("submit", this.currentInputContent);
+      //add note
+      this.managerNote.add(this.currentInputContent);
+      //clean
+      this.resetInputContent();
       this.isInputFocused = false;
     },
   },
