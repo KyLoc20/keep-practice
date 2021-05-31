@@ -1,5 +1,9 @@
 <template>
-  <section class="icon-button" :class="disabled ? 'disabled' : ''">
+  <section
+    class="icon-button"
+    :class="disabled ? 'disabled' : ''"
+    :style="buttonSize"
+  >
     <button
       @click="handleButtonClick"
       @mouseenter="handleHoverEnter"
@@ -18,15 +22,6 @@
 import Icon from "../../components/Icon/Icon";
 import Rippleable from "../../mixins/rippleable";
 import { requireOneOf, requirePositiveNumber } from "../common/validator";
-const propSize = {
-  default: "md",
-  validator: (v) => {
-    return [
-      requireOneOf(["sm", "md", "lg"]),
-      requirePositiveNumber(),
-    ].some((test) => test(v));
-  },
-};
 const ColorThemeMap = {
   primary: {
     main: [0, 0, 0, 0],
@@ -53,6 +48,11 @@ const ColorThemeMap = {
     ripple: [255, 255, 255, 0.3],
   },
 };
+const ButtonSizeMap = {
+  sm: 44,
+  md: 48,
+  lg: 60,
+};
 export default {
   name: "IconButton",
   components: { Icon },
@@ -67,18 +67,44 @@ export default {
     icon: {
       type: String,
     },
-    //alias iconSize
-    size: propSize,
-    iconSize: propSize,
+    //size of button
+    //the size of button is also controlled by outer css
+    size: {
+      required: false,
+      validator: (v) => {
+        return [
+          requireOneOf(["sm", "md", "lg"]),
+          requirePositiveNumber(),
+        ].some((test) => test(v));
+      },
+    },
+    iconSize: {
+      default: "md",
+      validator: (v) => {
+        return [
+          requireOneOf(["sm", "md", "lg"]),
+          requirePositiveNumber(),
+        ].some((test) => test(v));
+      },
+    },
     disabled: {
       default: false,
       type: Boolean,
     },
-    hoverColor:{
-       type: String,
+    disrippled: {
+      default: false,
+      type: Boolean,
+    },
+    hoverColor: {
+      type: String,
       required: false,
     },
     iconColor: {
+      type: String,
+      required: false,
+    },
+    //this is not a standard api of material design
+    iconHoverColor: {
       type: String,
       required: false,
     },
@@ -86,11 +112,12 @@ export default {
       type: String,
       required: false,
     },
-    //todo to implement apis below
     //alias icon
     ariaLabel: {
       type: String,
     },
+    //todo to implement apis below
+
     badge: {
       required: false,
       type: Number,
@@ -111,11 +138,22 @@ export default {
     };
   },
   computed: {
+    buttonSize() {
+      if (this.size) {
+        return {
+          width: `${this.getSize(this.size)}px`,
+          height: `${this.getSize(this.size)}px`,
+        };
+      } else {
+        return {};
+      }
+    },
     mainBgColor() {
       //todo disabled
       if (this.isHovering)
         return {
-          background: this.hoverColor||this.getColorFromTheme(this.color, "focus"),
+          background:
+            this.hoverColor || this.getColorFromTheme(this.color, "focus"),
         };
       else {
         return {
@@ -124,7 +162,9 @@ export default {
       }
     },
     iconFillColor() {
-      return this.iconColor || this.getColorFromTheme(this.color, "icon");
+      if (!this.isActive) return "rgba(0, 0, 0, 0.26)";
+      if (this.isHovering && this.iconHoverColor) return this.iconHoverColor;
+      else return this.iconColor || this.getColorFromTheme(this.color, "icon");
     },
     rippleRenderColor() {
       return this.rippleColor || this.getColorFromTheme(this.color, "ripple");
@@ -142,11 +182,16 @@ export default {
       if (alpha) arr[3] = alpha;
       return `rgba(${arr[0]},${arr[1]},${arr[2]},${arr[3]})`;
     },
+    getSize(input) {
+      if (ButtonSizeMap[input] !== undefined) return ButtonSizeMap[input];
+      else return input;
+    },
     handleButtonClick(e) {
       if (!this.isActive) return;
       console.log("Inner Icon onButtonClick");
       this.$emit("click", e);
-      this.createRippleByAddingLayer(e, true, this.rippleRenderColor);
+      if (!this.disrippled)
+        this.createRippleByAddingLayer(e, true, this.rippleRenderColor);
     },
     handleHoverEnter() {
       if (!this.isActive) return;
@@ -162,12 +207,16 @@ export default {
 <style lang="less" scoped>
 .remove-button-default {
   margin: 0;
+  padding: 0;
   outline: none;
   border: none;
   cursor: pointer;
   user-select: none;
 }
-
+.default-size {
+  width: 48px;
+  height: 48px;
+}
 .center-layout {
   display: flex;
   flex-direction: column;
@@ -176,23 +225,19 @@ export default {
 }
 .icon-button {
   border-radius: 50%;
-  box-shadow: none;
   background: transparent;
+  //default
+  .default-size();
   button {
     .remove-button-default();
     border-radius: 50%;
     .center-layout();
     box-sizing: border-box;
-    width: 28px;
-    height: 28px;
+    height: 100%;
+    width: 100%;
   }
-  // &.disabled {
-  //   button {
-  //     color: rgba(0, 0, 0, 0.26);
-  //     &:hover {
-  //       color: rgba(0, 0, 0, 0.26);
-  //     }
-  //   }
-  // }
+  &.disabled button {
+    cursor: default;
+  }
 }
 </style>

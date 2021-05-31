@@ -50,18 +50,22 @@
           <section class="control-context" v-if="isInputFocused">
             <section class="tool-context">
               <icon-button
-                size="sm"
                 icon="label"
+                :size="34"
+                :iconSize="17"
                 hoverColor="rgba(232,234,237,0.08)"
                 iconColor="#9aa0a6"
-                disabled
+                iconHoverColor="#e8eaed"
+                disrippled
               ></icon-button>
               <icon-button
-                size="sm"
                 icon="palette"
-                :iconSize="16"
-                 hoverColor="rgba(232,234,237,0.08)"
+                :size="34"
+                :iconSize="17"
+                hoverColor="rgba(232,234,237,0.08)"
                 iconColor="#9aa0a6"
+                iconHoverColor="#e8eaed"
+                disrippled
               ></icon-button>
             </section>
             <section class="action-context">
@@ -194,9 +198,9 @@ export default {
     }
     .navigation-menu {
       margin: 0 4px;
-      .icon-button{
-        width:48px;
-        height:48px;
+      .icon-button {
+        width: 48px;
+        height: 48px;
       }
     }
     .logo {
@@ -357,7 +361,7 @@ export default {
     .note-group-component {
       display: flex;
       flex-wrap: wrap;
-      padding:0 38px;
+      padding: 0 38px;
       box-sizing: border-box;
     }
   }
