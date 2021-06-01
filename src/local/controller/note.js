@@ -21,6 +21,28 @@ class NoteManager {
         this.saveNotes()
         console.log('add', note.content)
     }
+    updateLabel(index, name, selected) {
+        let oldLabels = this.collection[index].labels
+        let updatedLabels = []
+        if (!selected) {
+            //unselect
+            for (let label of oldLabels) {
+                if (label === name); //skip to remove it
+                else updatedLabels.push(label)
+            }
+        } else {
+            //select
+            updatedLabels = [...oldLabels]
+                //already exist do nothing
+            if (oldLabels.indexOf(name) > -1);
+            else updatedLabels.push(name)
+        }
+        let oldNote = this.collection[index]
+        let newNote = new Note(oldNote.content, oldNote.color, updatedLabels, oldNote.id)
+        this.collection.splice(index, 1, newNote)
+            //todo performance
+        this.saveNotes()
+    }
     deleteByIndex(index) {
         this.collection.splice(index, 1)
         this.saveNotes()

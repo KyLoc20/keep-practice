@@ -77,9 +77,16 @@
         </div>
       </section>
       <section class="note-group-component">
-        <vnote :content="note.content" :labels="note.labels" :color="note.color" :index="idx" 
-        @delete="handleDeleteNote"
-        v-for="(note,idx) in noteCollection" :key="note.id"></vnote>
+        <vnote
+          :content="note.content"
+          :labels="calcLabelStatus(note.labels)"
+          :color="note.color"
+          :index="idx"
+          @delete="handleDeleteNote"
+          @label="handleUpdateNoteLabels"
+          v-for="(note, idx) in noteCollection"
+          :key="note.id"
+        ></vnote>
       </section>
     </section>
   </div>
@@ -113,9 +120,9 @@ export default {
     };
   },
   computed: {
-    noteCollection(){
-      if(this.managerNote)return this.managerNote.collection
-      else return []
+    noteCollection() {
+      if (this.managerNote) return this.managerNote.collection;
+      else return [];
     },
     leftContainerWidth() {
       if (this.isNavigationCollapsed) return { width: "80px" };
@@ -149,6 +156,18 @@ export default {
       console.log("initNoteManager", note.obj);
       this.managerNote = NoteManager.getInstance();
     },
+    calcLabelStatus(selectedLabels) {
+      //according to given selected labels of a note, generate its labels prop
+      let propLabels = [];
+      for (let availableLabel of this.labels) {
+        propLabels.push({
+          name: availableLabel.name,
+          selected: selectedLabels.indexOf(availableLabel.name) > -1 ? true : false,
+        });
+      }
+      // console.log('calcLabelStatus',selectedLabels,propLabels)
+      return propLabels;
+    },
     handleSelectAnchor(e, label) {
       console.log("handleSelectAnchor", e, label);
       this.selctedAnchor = label;
@@ -174,7 +193,11 @@ export default {
       this.currentInputContent = "";
     },
     handleInputDone() {
-      console.log("handleInputDone", this.currentInputContent,this.managerNote.renderNotes());
+      console.log(
+        "handleInputDone",
+        this.currentInputContent,
+        this.managerNote.renderNotes()
+      );
       this.$emit("submit", this.currentInputContent);
       //add note
       this.managerNote.add(this.currentInputContent);
@@ -182,9 +205,13 @@ export default {
       this.resetInputContent();
       this.isInputFocused = false;
     },
-    handleDeleteNote(e){
-      console.log('handleDeleteNote',e)
+    handleDeleteNote(e) {
+      console.log("handleDeleteNote", e);
       this.managerNote.deleteByIndex(e);
+    },
+    handleUpdateNoteLabels(e){
+      console.log("handleUpdateNoteLabels", e);
+      this.managerNote.updateLabel(e.index,e.name,e.selected)
     }
   },
   mounted() {
