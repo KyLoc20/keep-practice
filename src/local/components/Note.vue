@@ -32,6 +32,19 @@
           disrippled
         ></icon-button
       ></transition>
+            <transition>
+        <icon-button
+          v-show="isHovering"
+          icon="bin"
+          :size="34"
+          :iconSize="17"
+          hoverColor="rgba(232,234,237,0.08)"
+          iconColor="#9aa0a6"
+          iconHoverColor="#e8eaed"
+          disrippled
+          @click="handleDelete"
+        ></icon-button
+      ></transition>
     </div>
   </section>
 </template>
@@ -40,6 +53,10 @@ import IconButton from "../../components/Button/IconButton";
 export default {
   name: "Note",
   props: {
+    index:{
+      //convenient for editing
+      type:Number,
+    },
     content: {
       type: String,
     },
@@ -71,6 +88,9 @@ export default {
     },
     handleHoverLeave() {
       this.isHovering = false;
+    },
+    handleDelete(){
+      this.$emit('delete',this.index)
     },
   },
 };

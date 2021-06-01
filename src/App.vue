@@ -77,7 +77,9 @@
         </div>
       </section>
       <section class="note-group-component">
-        <vnote :content="note.content" :labels="note.labels" :color="note.color" v-for="note in noteCollection" :key="note.id"></vnote>
+        <vnote :content="note.content" :labels="note.labels" :color="note.color" :index="idx" 
+        @delete="handleDeleteNote"
+        v-for="(note,idx) in noteCollection" :key="note.id"></vnote>
       </section>
     </section>
   </div>
@@ -180,6 +182,10 @@ export default {
       this.resetInputContent();
       this.isInputFocused = false;
     },
+    handleDeleteNote(e){
+      console.log('handleDeleteNote',e)
+      this.managerNote.deleteByIndex(e);
+    }
   },
   mounted() {
     this.initNoteManager();

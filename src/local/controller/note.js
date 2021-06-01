@@ -21,6 +21,10 @@ class NoteManager {
         this.saveNotes()
         console.log('add', note.content)
     }
+    deleteByIndex(index) {
+        this.collection.splice(index, 1)
+        this.saveNotes()
+    }
     saveNotes() {
         const notesJSON = this.collection.map((item) => { return { content: item.content, color: item.color, labels: item.labels, id: item.id, } });
         dumpToLocalStorage('notes', notesJSON)
