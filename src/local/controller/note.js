@@ -1,10 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
+import { dumpToLocalStorage, loadFromLocalStorage } from '../utils/storage'
 // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 // uuidv4(); 
 class NoteManager {
     constructor(props) {
         this.props = props
-        this.collection = []
+        this.collection = this.loadNotes()
     }
     static getInstance(props) {
         if (!this.instance) {
@@ -17,7 +18,26 @@ class NoteManager {
     add(content, color, labels) {
         let note = new Note(content, color, labels)
         this.collection.push(note)
+        this.saveNotes()
         console.log('add', note.content)
+    }
+    saveNotes() {
+        const notesJSON = this.collection.map((item) => { return { content: item.content, color: item.color, labels: item.labels, id: item.id, } });
+        dumpToLocalStorage('notes', notesJSON)
+        console.log("saveNotesFromLocalStorage", notesJSON);
+    }
+    loadNotes() {
+        const notesJSON = loadFromLocalStorage('notes')
+        if (notesJSON && Array.isArray(notesJSON)) {
+            console.log("loadNotesFromLocalStorage", notesJSON);
+            const Notes = []
+            for (let item of notesJSON) {
+                Notes.push(new Note(item.content, item.color, item.labels, item.id))
+            }
+            return Notes;
+        } else {
+            return [];
+        }
     }
     renderNotes() {
         const arr = []
@@ -28,8 +48,8 @@ class NoteManager {
     }
 }
 class Note {
-    constructor(content, color, labels) {
-        this._id = uuidv4()
+    constructor(content, color, labels, id) {
+        this._id = id || uuidv4()
         this._content = content
         this._color = color || 'default'
         this._labels = labels || []
