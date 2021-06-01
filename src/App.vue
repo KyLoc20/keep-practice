@@ -77,7 +77,7 @@
         </div>
       </section>
       <section class="note-group-component">
-        <vnote :content="note.content" v-for="note in noteCollection" :key="note.id"></vnote>
+        <vnote :content="note.content" :labels="note.labels" :color="note.color" v-for="note in noteCollection" :key="note.id"></vnote>
       </section>
     </section>
   </div>
@@ -86,7 +86,7 @@
 <script>
 import AppBar from "./local/components/AppBar";
 import Vnote from "./local/components/Note";
-import IconButton from "./components/Button/IconButton2";
+import IconButton from "./components/Button/IconButton";
 import Icon from "./components/Icon/Icon";
 import { NoteManager, Note } from "./local/controller/note";
 export default {
@@ -328,16 +328,6 @@ export default {
             align-items: center;
             .icon-button {
               margin: 0 8px;
-              // &:hover {
-              //   /deep/ .icon {
-              //     fill: #e8eaed !important;
-              //   }
-              // }
-
-              // /deep/ button {
-              //   //todo IconButton prop missing
-              //   padding: 7px;
-              // }
             }
           }
           .action-context {
@@ -366,6 +356,8 @@ export default {
     }
     .note-group-component {
       display: flex;
+      width: 100%;
+      justify-content: flex-start;
       flex-wrap: wrap;
       padding: 0 38px;
       box-sizing: border-box;
