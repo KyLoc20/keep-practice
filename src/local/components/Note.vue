@@ -5,9 +5,12 @@
     @mouseleave="handleHoverLeave"
   >
     <div class="content-context">
-      <div class="text" v-html="parsedContent"></div>
+      <div class="text-container" v-html="parsedContent"></div>
+      <div class="label-container">
+        <chip>easy</chip>
+      </div>
     </div>
-    <div class="control-context">
+    <div class="tool-context">
       <div class="button-wrapper">
         <transition>
           <icon-button
@@ -70,8 +73,13 @@
 </template>
 <script>
 import IconButton from "../../components/Button/IconButton";
+import Chip from "../../local/components/Chip";
 export default {
   name: "Note",
+  components: {
+    IconButton,
+    Chip,
+  },
   props: {
     index: {
       //convenient for editing
@@ -88,9 +96,6 @@ export default {
       type: String,
       required: false,
     },
-  },
-  components: {
-    IconButton,
   },
   data() {
     return {
@@ -111,7 +116,7 @@ export default {
         iconSize: 17,
         hoverColor: "rgba(232,234,237,0.08)",
         iconColor: "#9aa0a6",
-        iconHoverColor: "e8eaed",
+        iconHoverColor: "#e8eaed",
         disrippled: true,
       };
     },
@@ -175,7 +180,7 @@ export default {
     flex-direction: column;
     flex-wrap: wrap;
     min-height: 60px;
-    .text {
+    .text-container {
       box-sizing: border-box;
       padding: 12px 16px;
       width: 100%;
@@ -184,10 +189,17 @@ export default {
       letter-spacing: 0;
       line-height: 1.5rem;
     }
-    .label {
+    .label-container {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 5px 10px;
+      .chip {
+        margin: 6px 6px 0 0;
+      }
     }
   }
-  .control-context {
+  .tool-context {
     display: flex;
     width: 100%;
     height: 34px;
