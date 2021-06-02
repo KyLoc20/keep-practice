@@ -391,6 +391,7 @@ export default {
       display: flex;
       width: 100%;
       justify-content: flex-start;
+      align-items: flex-start;
       flex-wrap: wrap;
       padding: 0 38px;
       box-sizing: border-box;

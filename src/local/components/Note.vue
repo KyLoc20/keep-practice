@@ -7,7 +7,9 @@
     <div class="content-context">
       <div class="text-container" v-html="parsedContent"></div>
       <div class="label-container">
-        <chip>easy</chip>
+        <chip v-for="label in selectedLabel" :key="label.name" @delete="handleWillDeleteLabel($event,label.name)">{{
+          label.name
+        }}</chip>
       </div>
     </div>
     <div class="tool-context">
@@ -89,7 +91,8 @@ export default {
       type: String,
     },
     labels: {
-      //{name:"easy",selected:false,}
+      //currently they are all available labels
+      //{name:"easy",selected:true,}
       type: Array,
     },
     color: {
@@ -106,6 +109,9 @@ export default {
     };
   },
   computed: {
+    selectedLabel() {
+      return this.labels.filter((label) => label.selected);
+    },
     parsedContent() {
       //todo maybe its redundant
       return this.content ? this.content.replace(/\n/gm, "<br/>") : "";
@@ -149,6 +155,14 @@ export default {
         selected: !selectedBefore,
       });
     },
+    handleWillDeleteLabel(e, name) {
+      console.log("handleDeleteLabel", this.index, name);
+      this.$emit("label", {
+        index: this.index,
+        name,
+        selected: false,
+      });
+    },
     handleFinishSelecting() {
       this.isWorking = false;
       this.isLabelSelecting = false;
@@ -163,6 +177,8 @@ export default {
 </script>
 <style lang="less" scoped>
 .note {
+  display: flex;
+  flex-direction: column;
   width: 240px;
   margin: 8px;
   background-color: #202124;

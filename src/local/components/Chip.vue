@@ -10,13 +10,12 @@
       </div>
       <div class="btn-wrapper">
         <span v-if="isHovering" class="trick-hover-text"><slot></slot></span>
-         <icon-button
-            v-if="isHovering"
-            icon="cross"
-            v-bind="buttonStyles"
-            @click="handleDelete"
-          ></icon-button
-        >
+        <icon-button
+          v-if="isHovering"
+          icon="cross"
+          v-bind="buttonStyles"
+          @click="handleDelete"
+        ></icon-button>
       </div>
     </section>
   </transition>
@@ -55,8 +54,10 @@ export default {
     handleHoverLeave() {
       this.isHovering = false;
     },
-    handleClick() {},
-    handleDelete() {},
+    handleDelete() {
+      console.log('handleDelete')
+      this.$emit("delete")
+    },
   },
 };
 </script>
@@ -105,12 +106,10 @@ export default {
 }
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 251ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    transform 167ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 .v-enter,
 .v-leave-to {
-  transform: scale(0);
   opacity: 0;
 }
 </style>
