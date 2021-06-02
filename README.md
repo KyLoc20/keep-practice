@@ -7,8 +7,7 @@ What I wanna do is to write it down quickly as a note📝 once I think the stuff
 Also I could attach some labels🏷 to my notes in order to catalog them.  
 So I am making my own Google Keep with a few enhancements such as a self-examination feature where I review the stuff by typing.  
 That's why I call it Keep-Practice.  
-Considering I am working on a Material Design UI project with vue [mym-UI](https://github.com/KyLoc20/mym-UI), I build this project with my handmade "bricks". Challenging and exciting.  
-
+Considering I am working on a Material Design UI project with vue [mym-UI](https://github.com/KyLoc20/mym-UI), I build this project with my handmade "bricks".
 
 ## Project setup
 ```
