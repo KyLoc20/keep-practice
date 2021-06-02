@@ -1,4 +1,8 @@
-# keep-practice
+# Keep-Practice, A Mod of Google Keep
+
+## Introduction
+What does an ideal Note app in my mind look like? Google Keep has given an answer, that is Clean and Flexible like a breeze.
+
 
 ## Project setup
 ```
