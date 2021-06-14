@@ -79,9 +79,10 @@
       <section class="note-group-component">
         <vnote
           :content="note.content"
-          :labels="calcLabelStatus(note.labels)"
+          :labels="genLabelStatus(note.labels)"
           :color="note.color"
           :index="idx"
+          :id="note.id"
           @delete="handleDeleteNote"
           @label="handleUpdateNoteLabels"
           v-for="(note, idx) in noteCollection"
@@ -168,7 +169,7 @@ export default {
       console.log("initNoteManager", note.obj);
       this.managerNote = NoteManager.getInstance();
     },
-    calcLabelStatus(selectedLabels) {
+    genLabelStatus(selectedLabels) {
       //according to given selected labels of a note, generate its labels prop
       let propLabels = [];
       for (let availableLabel of this.labels) {
@@ -178,7 +179,7 @@ export default {
             selectedLabels.indexOf(availableLabel.name) > -1 ? true : false,
         });
       }
-      // console.log('calcLabelStatus',selectedLabels,propLabels)
+      // console.log('genLabelStatus',selectedLabels,propLabels)
       return propLabels;
     },
     handleSelectAnchor(e, label) {
@@ -217,11 +218,11 @@ export default {
     },
     handleDeleteNote(e) {
       console.log("handleDeleteNote", e);
-      this.managerNote.deleteByIndex(e);
+      this.managerNote.delete(e.id);
     },
     handleUpdateNoteLabels(e) {
       console.log("handleUpdateNoteLabels", e);
-      this.managerNote.updateLabelsByIndex(e.index, e.name, e.selected);
+      this.managerNote.updateLabels(e.id, e.name, e.selected);
     },
   },
   mounted() {

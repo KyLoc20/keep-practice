@@ -40,6 +40,7 @@ class NoteManager {
         if (indexToDelete > -1) {
             this.collection.splice(indexToDelete, 1)
             console.log('Successfully delete the note of id: ', id)
+            this.saveNotes()
         } else console.warn('Failed to delete the note of id: ', id)
     }
     deleteByKey(key, value, all) {
@@ -58,9 +59,10 @@ class NoteManager {
     }
     updateLabels(id, name, selected) {
         //delete a note's labels by id once a label
-        const index = this.find(id)
+        const index = this.index(id)
         if (index < 0) return
         const oldNote = this.collection[index]
+        console.log('updateLabels', oldNote.id, oldNote.content)
         const oldLabels = oldNote.labels
         let updatedLabels = []
         if (!selected) {

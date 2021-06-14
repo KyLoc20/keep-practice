@@ -7,9 +7,12 @@
     <div class="content-context">
       <div class="text-container" v-html="parsedContent"></div>
       <div class="label-container">
-        <chip v-for="label in selectedLabel" :key="label.name" @delete="handleWillDeleteLabel($event,label.name)">{{
-          label.name
-        }}</chip>
+        <chip
+          v-for="label in selectedLabel"
+          :key="label.name"
+          @delete="handleWillDeleteLabel($event, label.name)"
+          >{{ label.name }}</chip
+        >
       </div>
     </div>
     <div class="tool-context">
@@ -24,14 +27,16 @@
         ></transition>
         <transition name="menu">
           <div class="label-menu" v-if="isLabelSelecting">
-            <div class="control-mask" @click="handleFinishSelecting"></div>
+            <div class="control-mask" @click="handleStopSelectLabel"></div>
             <div class="title">Label note</div>
             <div class="list">
               <div
                 class="anchor"
                 v-for="(label, idx) in labels"
                 :key="idx"
-                @click="handleSelectedLabel($event, label.name, label.selected)"
+                @click="
+                  handleDoneSelectLabel($event, label.name, label.selected)
+                "
               >
                 <span class="checkbox">
                   <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
@@ -66,7 +71,7 @@
             v-show="shouldShowController"
             icon="bin"
             v-bind="buttonStyles"
-            @click="handleDelete"
+            @click="handleWillDeleteNote"
           ></icon-button
         ></transition>
       </div>
@@ -86,6 +91,10 @@ export default {
     index: {
       //convenient for editing
       type: Number,
+    },
+    id: {
+      //unique for editing
+      type: String,
     },
     content: {
       type: String,
@@ -138,39 +147,44 @@ export default {
       console.log("handleHoverLeave");
       this.isHovering = false;
     },
-    handleDelete() {
-      this.$emit("delete", this.index);
-    },
     handleWannaSelectLabel() {
       //trick to leave hover
       this.isHovering = false;
       this.isWorking = true;
       this.isLabelSelecting = true;
     },
-    handleSelectedLabel(e, name, selectedBefore) {
-      console.log("handleSelectedLabel", this.index, name, selectedBefore);
+    handleDoneSelectLabel(e, name, selectedBefore) {
+      console.log("handleDoneSelectLabel", this.index, name, selectedBefore);
       this.$emit("label", {
         index: this.index,
+        id: this.id,
         name,
         selected: !selectedBefore,
+      });
+    },
+    handleStopSelectLabel() {
+      this.isWorking = false;
+      this.isLabelSelecting = false;
+      console.log(
+        "handleStopSelectLabel",
+        this.isWorking,
+        this.isLabelSelecting
+      );
+    },
+    handleWillDeleteNote() {
+      this.$emit("delete", {
+        index: this.index,
+        id: this.id,
       });
     },
     handleWillDeleteLabel(e, name) {
       console.log("handleDeleteLabel", this.index, name);
       this.$emit("label", {
         index: this.index,
+        id: this.id,
         name,
         selected: false,
       });
-    },
-    handleFinishSelecting() {
-      this.isWorking = false;
-      this.isLabelSelecting = false;
-      console.log(
-        "handleFinishSelecting",
-        this.isWorking,
-        this.isLabelSelecting
-      );
     },
   },
 };
