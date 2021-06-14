@@ -88,6 +88,10 @@
           :key="note.id"
         ></vnote>
       </section>
+      <section class="dev-monitor" v-if="true">
+        <div>[selectedAnchor]: {{ selectedAnchor }}</div>
+        <div>[selectedLabel]: {{ selectedLabel }}</div>
+      </section>
     </section>
   </div>
 </template>
@@ -112,17 +116,25 @@ export default {
         { name: "Archive", icon: "archive" },
         { name: "Bin", icon: "bin" },
       ],
-      labels: [{ name: "easy" }, { name: "medium" }, { name: "hard" }],
-      selctedAnchor: "Notes",
+      labels: [{ name: "sweet" }, { name: "high" }, { name: "pro" }],
+      selectedAnchor: "Notes",
       managerNote: null,
       currentInputContent: null,
       testStr: "1\n2",
     };
   },
   computed: {
+    selectedLabel() {
+      if (this.labels.map((v) => v.name).indexOf(this.selectedAnchor) > -1)
+        return this.selectedAnchor;
+      else return null;
+    },
     noteCollection() {
-      if (this.managerNote) return this.managerNote.collection;
-      else return [];
+      if (!this.managerNote) return [];
+      if (this.selectedLabel) {
+        //filtered by label
+        return [];
+      } else return this.managerNote.collection;
     },
     leftContainerWidth() {
       if (this.isNavigationCollapsed) return { width: "80px" };
@@ -162,7 +174,8 @@ export default {
       for (let availableLabel of this.labels) {
         propLabels.push({
           name: availableLabel.name,
-          selected: selectedLabels.indexOf(availableLabel.name) > -1 ? true : false,
+          selected:
+            selectedLabels.indexOf(availableLabel.name) > -1 ? true : false,
         });
       }
       // console.log('calcLabelStatus',selectedLabels,propLabels)
@@ -170,7 +183,7 @@ export default {
     },
     handleSelectAnchor(e, label) {
       console.log("handleSelectAnchor", e, label);
-      this.selctedAnchor = label;
+      this.selectedAnchor = label;
       this.$emit("select", { anchor: label });
     },
     handleOpenMenu() {
@@ -193,11 +206,8 @@ export default {
       this.currentInputContent = "";
     },
     handleInputDone() {
-      console.log(
-        "handleInputDone",
-        this.currentInputContent,
-        this.managerNote.renderNotes()
-      );
+      console.log("handleInputDone", this.currentInputContent);
+      //console.log(this.managerNote.renderNotesToArray())
       this.$emit("submit", this.currentInputContent);
       //add note
       this.managerNote.add(this.currentInputContent);
@@ -209,10 +219,10 @@ export default {
       console.log("handleDeleteNote", e);
       this.managerNote.deleteByIndex(e);
     },
-    handleUpdateNoteLabels(e){
+    handleUpdateNoteLabels(e) {
       console.log("handleUpdateNoteLabels", e);
-      this.managerNote.updateLabel(e.index,e.name,e.selected)
-    }
+      this.managerNote.updateLabelsByIndex(e.index, e.name, e.selected);
+    },
   },
   mounted() {
     this.initNoteManager();
@@ -396,6 +406,12 @@ export default {
       padding: 0 38px;
       box-sizing: border-box;
     }
+  }
+  .dev-monitor {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px;
   }
 }
 .v-enter-active {

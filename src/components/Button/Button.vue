@@ -29,27 +29,40 @@
 import Rippleable from "../../mixins/rippleable";
 import Icon from "../../components/Icon/Icon";
 import LoadingEffect from "./LoadingEffect";
+import { requireOneOf, requirePositiveNumber } from "../common/validator";
 export default {
   name: "Button",
   components: { Icon, LoadingEffect },
   mixins: [Rippleable],
   props: {
+    //the style of the button
     variant: {
       default: "contained",
       validator: (v) => {
-        return ["contained", "text", "outlined", "iconed"].indexOf(v) !== -1;
+        return [requireOneOf(["contained", "text", "outlined"])].some((test) =>
+          test(v)
+        );
       },
     },
+    //the color theme of the button
     color: {
       default: "default",
       validator: (v) => {
-        return ["plain", "default", "primary", "secondary"].indexOf(v) !== -1;
+        return [
+          requireOneOf(["plain", "default", "primary", "secondary"]),
+        ].some((test) => test(v));
       },
     },
+    //the preset size of button
+    //the size(many aspects) of button is also controlled by outer css
+    //aspects including width, height, padding, border-radius
+    //todo provide prop for the above-mentioned
     size: {
-      default: "md",
+      required: false,
       validator: (v) => {
-        return ["sm", "md", "lg"].indexOf(v) !== -1;
+        return [
+          requireOneOf(["sm", "md", "lg"]),
+        ].some((test) => test(v));
       },
     },
     flat: {
@@ -292,7 +305,6 @@ button {
   }
 }
 .iconed-btn {
-  
   background: transparent;
   &.default-btn {
     color: rgba(0, 0, 0, 0.54);
