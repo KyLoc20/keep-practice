@@ -22,7 +22,7 @@
           class="navigation-anchor"
           v-for="(item, idx) in navigationAnchors"
           :key="idx"
-          :class="selctedAnchor === item.name ? 'selected' : ''"
+          :class="selectedAnchor === item.name ? 'selected' : ''"
           :style="styleNavigationAnchor"
           @click="handleSelectAnchor($event, item.name)"
         >
@@ -85,7 +85,7 @@
           :id="note.id"
           @delete="handleDeleteNote"
           @label="handleUpdateNoteLabels"
-          v-for="(note, idx) in noteCollection"
+          v-for="(note, idx) in filteredNotes"
           :key="note.id"
         ></vnote>
       </section>
@@ -130,11 +130,19 @@ export default {
         return this.selectedAnchor;
       else return null;
     },
-    noteCollection() {
+    filteredNotes() {
       if (!this.managerNote) return [];
       if (this.selectedLabel) {
         //filtered by label
-        return [];
+        console.log(
+          "filteredNotes",
+          this.managerNote.collection.filter(
+            (note) => note.labels.indexOf(this.selectedLabel) > -1
+          )
+        );
+        return this.managerNote.collection.filter(
+          (note) => note.labels.indexOf(this.selectedLabel) > -1
+        );
       } else return this.managerNote.collection;
     },
     leftContainerWidth() {
